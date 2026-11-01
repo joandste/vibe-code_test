@@ -248,3 +248,7 @@ side by side (the runner substitutes `<file>` for the test path in output).
 - Buffers, string operations, destructuring, multi-arity functions,
   `trampoline`, `copy`/`compact` — all §13 backlog items.
 - Any standard library beyond §10.8.
+
+## Vibecoded implementation
+
+- vibecoded implementation lives in `vibecoded/` and has it's own readme

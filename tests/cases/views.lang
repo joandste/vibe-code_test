@@ -1,0 +1,68 @@
+; Views: next, drop, slice (§7)
+
+(def a @[1 2 3 4 5])
+
+(def v (drop 2 a))
+(length v)
+(first v)
+(get v 0)
+(get v 2)
+(get v 3)
+(get v -1)
+(get v 99)
+
+; views preserve flags ([V-008])
+(array? v)
+(tuple? v)
+
+; next on tuples keeps the bracket shape
+(def t [1 2 3])
+(def tv (next t))
+tv
+(bracket? tv)
+(paren? tv)
+(first tv)
+(length tv)
+
+; next on a paren tuple keeps the paren shape
+(def p (quote (1 2 3)))
+(def pv (next p))
+(paren? pv)
+(bracket? pv)
+
+; drop clamps instead of failing ([V-013])
+(drop 0 a)
+(drop -3 a)
+(drop 99 a)
+(drop 1 (quote []))
+(slice 1 3 a)
+(slice 3 1 a)
+(slice -5 2 a)
+(slice 2 99 a)
+(slice 5 5 a)
+
+; (drop n coll) == (slice n (length coll) coll)
+(= (drop 2 a) (slice 2 (length a) a))
+
+; (drop 1 coll) is equivalent to (next coll)
+(= (drop 1 a) (next a))
+
+; views share the buffer: mutation is visible through every view ([V-011])
+(def base @[1 2 3])
+(def mid (drop 1 base))
+(push! base 9)
+(length mid)
+(get mid 2)
+
+; nested views compose without copying
+(def nv (next (next (drop 1 @[1 2 3 4 5]))))
+nv
+(length nv)
+
+; nil handling
+(next nil)
+(first nil)
+(length nil)
+(empty? nil)
+(drop 1 nil)
+(slice 0 1 nil)

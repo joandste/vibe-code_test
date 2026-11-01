@@ -1,0 +1,43 @@
+; Macros (§9.11, §9.12)
+
+(defmacro unless [c a b]
+  (quasiquote (if (unquote c) (unquote b) (unquote a))))
+(unless false :yes :no)
+(unless true :yes :no)
+
+(defmacro twice [form]
+  (quasiquote (do (unquote form) (unquote form))))
+(var n 0)
+(twice (set! n (+ n 1)))
+n
+
+; macros receive unevaluated forms
+(defmacro second-of [form]
+  (get form 1))
+(second-of (foo 42))
+
+; quasiquote rebuilds sequences and keeps their flags
+(defmacro shapes []
+  (quasiquote (quote [(unquote (quote (1 2))) (unquote (quote @[3 4]))])))
+(shapes)
+(paren? (first (shapes)))
+(array? (get (shapes) 1))
+
+; nested unquotes survive one level of quoting
+(defmacro nested [x]
+  (quasiquote (quasiquote (unquote (unquote x)))))
+(nested (+ 1 2))
+
+; macroexpand expands one level and leaves other forms alone ([KW-013])
+(macroexpand (unless true 1 2))
+(macroexpand (+ 1 2))
+(macroexpand 5)
+
+; macros may expand to forms with multiple body expressions
+(defmacro when2 [c a b]
+  (quasiquote (if (unquote c) (do (unquote a) (unquote b)) nil)))
+(var hits 0)
+(when2 true (set! hits 1) (set! hits (+ hits 10)))
+hits
+(when2 false (set! hits 99) 0)
+hits

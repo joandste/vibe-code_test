@@ -1,0 +1,7 @@
+*.o
+langrun
+liblang.a
+embed
+tests/embed_test
+tests/**/*.actual
+tests/**/*.raw

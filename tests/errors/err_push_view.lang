@@ -1,0 +1,2 @@
+(def a @[1 2 3])
+(push! (slice 0 2 a) 4)

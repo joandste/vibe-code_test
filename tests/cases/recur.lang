@@ -1,0 +1,65 @@
+; Iteration and tail calls (§8)
+
+; canonical loop (§8.1)
+(defn sum [xs acc]
+  (if (empty? xs)
+    acc
+    (recur (next xs) (+ acc (first xs)))))
+(sum [1 2 3 4 5] 0)
+(sum (range 10000) 0)
+
+; recur in if branches
+(defn count-down [n acc]
+  (if (= n 0)
+    acc
+    (recur (dec n) (inc acc))))
+(count-down 1000 0)
+
+; recur in do and let tail positions ([I-008])
+(defn via-do [n]
+  (do
+    1
+    (if (= n 0) :done (recur (dec n)))))
+(via-do 5)
+(defn via-let [n]
+  (let [m (dec n)]
+    (if (< m 0) :done (recur m))))
+(via-let 5)
+
+; recur in and/or tail positions
+(defn via-and [n]
+  (and true (if (= n 0) :done (recur (dec n)))))
+(via-and 3)
+
+; non-tail calls grow the stack: ordinary recursion works ([I-009])
+(defn fact [n] (if (< n 2) 1 (* n (fact (dec n)))))
+(fact 10)
+
+; optional and rest parameters (§9.5)
+(defn opt [a &opt b c] [a b c])
+(opt 1)
+(opt 1 2)
+(opt 1 2 3)
+(defn rest [a & xs] [a xs])
+(rest 1)
+(rest 1 2 3)
+(defn both [a &opt b & xs] [a b xs])
+(both 1)
+(both 1 2)
+(both 1 2 3 4)
+
+; recur arity includes optional and rest slots ([I-005])
+(defn opt-recur [a &opt b]
+  (if b (+ a b) (recur 1 2)))
+(opt-recur 5)
+(defn rest-recur [a & xs]
+  (if (empty? xs) a (recur (+ a (first xs)) (next xs))))
+(rest-recur 1 10 20 30)
+
+; nested fn is the nearest recur target ([L-003])
+(defn outer [n]
+  (fn [m] (if (= m 0) n (recur (dec m)))))
+((outer 7) 3)
+
+; applying a function with an argument list
+(apply (fn [a b] (+ a b)) [1 2])

@@ -1,0 +1,69 @@
+; Control flow, bindings and closures (§9.1-§9.8, §9.13)
+
+(if true 1 2)
+(if false 1 2)
+(if false 1)
+(if nil 1 2)
+(if 0 1 2)
+(do)
+(do 1 2 3)
+(let [] 1)
+(let [a 1] a)
+(let [a 1 b (+ a 1) c (* b 3)] [a b c])
+(let [a 1] (let [a 2] a))
+(let [a 1] a)
+
+(def imm 1)
+imm
+(var mut 1)
+mut
+(set! mut 42)
+mut
+
+; def returns the bound value, var too
+(def d1 7)
+(var v1 8)
+
+; closures
+(defn make-adder [n] (fn [x] (+ x n)))
+(def add5 (make-adder 5))
+(add5 3)
+(defn counter []
+  (var n 0)
+  (fn [] (set! n (inc n)) n))
+(def c1 (counter))
+(c1)
+(c1)
+(c1)
+(def c2 (counter))
+(c2)
+
+; lexical scope is not dynamic
+(def x 10)
+(defn read-x [] x)
+(let [x 20] (read-x))
+
+; redefinition keeps existing closures on the previous value ([KW-002])
+(def y 1)
+(defn read-y [] y)
+(def y 2)
+(read-y)
+y
+
+; forward references resolve at call time
+(defn calls-late [] (late))
+(defn late [] :late)
+(calls-late)
+
+; sequential let bindings and shadowing
+(let [a 1 b (+ a 1)] b)
+
+; and/or short circuit and default results ([KW-010], [KW-011])
+(and)
+(or)
+(and 1 2 3)
+(and 1 nil 3)
+(and nil (error-should-not-be-evaluated))
+(or nil false 7)
+(or 1 (error-should-not-be-evaluated))
+(or nil false)

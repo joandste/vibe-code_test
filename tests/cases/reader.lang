@@ -1,0 +1,59 @@
+; Reader: literals, shapes and flags (§3, §4, §5.2, §5.6)
+
+; every reader product and its runtime kind
+(quote (f x))
+(quote [f x])
+(quote @(f x))
+(quote @[f x])
+(quote {1 2})
+(quote @{1 2})
+
+(paren? (quote (f x)))
+(bracket? (quote [f x]))
+(array? (quote @(f x)))
+(struct? (quote {1 2}))
+(table? (quote @{1 2}))
+
+; @() and @[] produce indistinguishable arrays ([P-010], [T-006b])
+(= @(1 2) @[1 2])
+(array? @())
+(array? @[])
+
+; empty forms
+()
+[]
+@[]
+{}
+@{}
+(empty? [])
+(empty? (quote ()))
+
+; self-evaluating atoms
+nil
+true
+false
+42
+-7
+0xff
+1.5
+-2.25e2
+"str"
+:key
+
+; strings and escapes
+"a\nb\tc\"d\\e"
+"\x41\x42"
+
+; numbers keep their kind
+(type 1)
+(type 1.0)
+
+; symbols and keywords are distinct
+(symbol? (quote abc))
+(keyword? :abc)
+(= (quote abc) :abc)
+
+; comments and whitespace
+; this is a comment
+(+ 1 ; trailing comment
+   2)

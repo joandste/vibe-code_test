@@ -1,0 +1,31 @@
+<function sum>
+15
+49995000
+<function count-down>
+1000
+<function via-do>
+:done
+<function via-let>
+:done
+<function via-and>
+:done
+<function fact>
+3628800
+<function opt>
+[1 nil nil]
+[1 2 nil]
+[1 2 3]
+<function rest>
+[1 nil]
+[1 @[2 3]]
+<function both>
+[1 nil nil]
+[1 2 nil]
+[1 2 @[3 4]]
+<function opt-recur>
+3
+<function rest-recur>
+61
+<function outer>
+7
+3

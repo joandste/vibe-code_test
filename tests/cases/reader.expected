@@ -1,0 +1,39 @@
+(f x)
+[f x]
+@[f x]
+@[f x]
+{1 2}
+@{1 2}
+true
+true
+true
+true
+true
+true
+true
+true
+()
+[]
+@[]
+{}
+@{}
+true
+true
+nil
+true
+false
+42
+-7
+255
+1.5
+-225.0
+"str"
+:key
+"a\nb\tc\"d\\e"
+"AB"
+:number
+:number
+true
+true
+false
+3

@@ -1,0 +1,24 @@
+<macro unless>
+:yes
+:no
+<macro twice>
+0
+2
+2
+<macro second-of>
+42
+<macro shapes>
+[(1 2) @[3 4]]
+true
+true
+<macro nested>
+3
+(if true 2 1)
+(+ 1 2)
+5
+<macro when2>
+0
+11
+11
+nil
+11
